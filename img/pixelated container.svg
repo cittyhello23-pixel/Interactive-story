@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- background must be transparent -->
+  
+  <!-- Border shape -->
+  <path fill="#2c3e50" d="
+    M8 0 H56
+    L56 4 H60
+    L60 8 H64
+    V56
+    L60 56 V60
+    L56 60 V64
+    H8
+    L8 60 H4
+    L4 56 H0
+    V8
+    L4 8 V4
+    L8 4 Z
+
+    M12 4
+    L12 8 H8 V12 H4 V52 H8 V56 H12 V60 H52 V56 H56 V52 H60 V12 H56 V8 H52 V4 Z
+  "></path>
+</svg>

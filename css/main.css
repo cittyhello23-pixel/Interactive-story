@@ -1,0 +1,74 @@
+body {
+  background-color: #dbb5b5;
+  /* padding: 60px; */
+  margin: 0;
+  font-family: alagard;
+  color: #1e3445;
+  font-size: 19;
+}
+.locationCard {
+    border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 330px;
+  opacity: 85%;
+  text-align: center;
+  left: 50;
+  top: 30;
+  position: absolute;
+}
+
+.mainCard {
+  opacity: 85%;
+  position: absolute;
+  bottom: 40;
+  left: 50;
+}
+
+.textCard {
+  width: 1125px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* align-items: flex-start; */
+  gap: 10px;
+}
+.textCardContent {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  padding: 5px;
+  width: 700px;
+}
+.textCardOptions {
+  gap: 25px;
+  display: flex;
+  text-align: center;
+}
+.textCardOptions1 {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 1000px;
+}
+.textCardOptions2 {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 1000px;
+}
+.textCardOptions3 {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 1000px;
+}
+
+@font-face {
+  font-family: alagard;
+  src: url(../font/alagard/alagard.ttf);
+}
+@font-face {
+  font-family: alkhemikal;
+  src: url(../font/alkhemikal/Alkhemikal.ttf);
+}
