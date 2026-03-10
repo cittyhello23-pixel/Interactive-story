@@ -1,6 +1,5 @@
 body {
   background-color: #dbb5b5;
-  /* padding: 60px; */
   margin: 0;
   font-family: alagard;
   color: #1e3445;
@@ -9,6 +8,39 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+}
+.startPage {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 1000;
+}
+.startPage h1 {
+  font-size: 90px;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+.startPage p {
+  font-size: 30px;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+.startPage button {
+  background: none;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 30px;
+  font-family: alagard;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.startPage button:hover {
+  background: #ffffff;
+  color: #192d4e;
 }
 .locationCard {
   border: 16px solid transparent;

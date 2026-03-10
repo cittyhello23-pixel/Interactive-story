@@ -260,7 +260,7 @@ const story = [
     text: "Your head falls in to your hands as you try to stabilize yourself, but you cant stop yourself from hearing the voice of someone whispering inaudibly to you. This was bad, you knew it was. this wasn't real, nothing was real anymore. You stand up, but the room tilts and your tongue starts feeling inexplicitly dry. All the shadows in the room starts staring at you, directly at you. They sway and lean towards you like they're mocking you. ",
     button1: {
       text: "RESTART",
-      next: "Start",
+      next: "RestartScreen",
     },
     location: "Hallucinations",
   },
@@ -289,6 +289,8 @@ let textCardOptions1 = document.getElementById("textCardOptions1");
 let textCardOptions2 = document.getElementById("textCardOptions2");
 let textCardOptions3 = document.getElementById("textCardOptions3");
 let locationCard = document.getElementById("locationCard");
+let startPage = document.querySelector(".startPage");
+let mainCard = document.querySelector(".mainCard");
 let currentSceneId = "Start";
 
 function loadScene(sceneId) {
@@ -329,7 +331,18 @@ function loadScene(sceneId) {
 
   textCardOptions1.onclick = () => loadScene(scene.button1.next);
 }
-loadScene("Start");
+
+function startGame() {
+  startPage.style.display = "none";
+  mainCard.style.display = "block";
+  locationCard.style.display = "block";
+  loadScene("Start");
+}
+
+startPage.style.display = "block";
+mainCard.style.display = "none";
+locationCard.style.display = "none";
+document.body.style.backgroundImage = "url('./img/Start.jpg')";
 
 function loadBackground(location) {
   switch (location) {
@@ -338,7 +351,7 @@ function loadBackground(location) {
 
       break;
     case "Pills":
-      document.body.style.backgroundImage = "url('img/Pills.jpg')";
+      document.body.style.backgroundImage = "url('img/  Pills.jpg')";
 
       break;
     case "Hallucinations":
@@ -381,7 +394,7 @@ function loadBackground(location) {
       document.body.style.backgroundImage = "url('img/Bathroom.jpg')";
       break;
     default:
-      document.body.style.backgroundImage = "url('img/forest.png')";
+      document.body.style.backgroundImage = "url('img/Start.jpg')";
   }
 }
 
@@ -404,3 +417,9 @@ preloadImages([
   "url('img/Pills.jpg')",
   "url('img/Creek.jpg')",
 ]);
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'r') {
+    location.reload();
+  }
+});
