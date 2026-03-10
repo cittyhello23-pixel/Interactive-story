@@ -284,27 +284,4 @@ const story = [
   },
 ];
 
-// const textCard = document.getElementById(text);
-// const textCardOptions1 = document.getElementById(text);
-// const textCardOptions2 = document.getElementById(text);
-// const textCardOptions3 = document.getElementById(text);
 
-// let currentSceneId = "Start";
-
-// function loadScene(SceneId) {
-//   const scene = story.find((s) => s.id === sceneId);
-//   if (!scene) return;
-// }
-
-// currentSceneId = scene.id;
-
-// textCard.textCardContent = scene.text;
-// textCardOptions1.textCardContent = scene.button1.text;
-// textCardOptions2.textCardContent = scene.button2.text;
-// textCardOptions3.textCardContent = scene.button3.text;
-
-// textCardOptions1.onclick = () => loadScene(scene.button1.next);
-// textCardOptions2.onclick = () => loadScene(scene.button2.next);
-// textCardOptions3.onclick = () => loadScene(scene.button2.next);
-
-// loadScene("Start");
