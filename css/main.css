@@ -4,10 +4,14 @@ body {
   margin: 0;
   font-family: alagard;
   color: #1e3445;
-  font-size: 19;
+  font-size: 25px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
 }
 .locationCard {
-    border: 16px solid transparent;
+  border: 16px solid transparent;
   border-image-source: url(../img/Style=Heavyeeee.svg);
   border-image-slice: 16 fill;
   width: 330px;
@@ -23,6 +27,7 @@ body {
   position: absolute;
   bottom: 40;
   left: 50;
+  right: 50;
 }
 
 .textCard {
@@ -30,10 +35,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* align-items: flex-start; */
   gap: 10px;
 }
-.textCardContent {
+#textCardContent {
   border: 16px solid transparent;
   border-image-source: url(../img/Style=Heavyeeee.svg);
   border-image-slice: 16 fill;
@@ -45,23 +49,38 @@ body {
   display: flex;
   text-align: center;
 }
-.textCardOptions1 {
-  border: 16px solid transparent;
-  border-image-source: url(../img/Style=Heavyeeee.svg);
-  border-image-slice: 16 fill;
-  width: 1000px;
+#textCardOptions1:hover {
+  opacity: 75%;
+   cursor: pointer;
 }
-.textCardOptions2 {
-  border: 16px solid transparent;
-  border-image-source: url(../img/Style=Heavyeeee.svg);
-  border-image-slice: 16 fill;
-  width: 1000px;
+#textCardOptions2:hover {
+  opacity: 75%;
+   cursor: pointer;
+} 
+#textCardOptions3:hover {
+  opacity: 75%;
+   cursor: pointer;
 }
-.textCardOptions3 {
+
+#textCardOptions1 {
   border: 16px solid transparent;
   border-image-source: url(../img/Style=Heavyeeee.svg);
   border-image-slice: 16 fill;
-  width: 1000px;
+  width: 100%;
+}
+
+#textCardOptions2 {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 100%;
+}
+
+#textCardOptions3 {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 100%;
 }
 
 @font-face {
