@@ -65,6 +65,8 @@ const story = [
       next: "Start",
     },
     location: "Pills",
+        status: "neutral",
+
   },
   {
     id: "Throw them away",
@@ -122,6 +124,7 @@ const story = [
       next: "Start",
     },
     location: "Bedroom",
+    status: "good",
   },
   {
     id: "Stay outside",
@@ -218,6 +221,7 @@ const story = [
       next: "Search garage",
     },
     location: "Inside",
+  
   },
   {
     id: "Search garage",
@@ -263,6 +267,7 @@ const story = [
       next: "RestartScreen",
     },
     location: "Hallucinations",
+    status: "bad",
   },
   {
     id: "The park",
@@ -281,6 +286,7 @@ const story = [
       next: "Start",
     },
     location: "Park",
+    status: "bad",
   },
 ];
 
@@ -330,6 +336,24 @@ function loadScene(sceneId) {
   }
 
   textCardOptions1.onclick = () => loadScene(scene.button1.next);
+  currentLocation();
+  
+  if (scene.status == "good") {
+    endingScene.style.display = "flex";
+    endingCard.textContent = "Good ending";
+    locationCard.style.display = "none";
+  } else if (scene.status == "bad") {
+    endingScene.style.display = "flex";
+    endingCard.textContent = "Bad ending";
+    locationCard.style.display = "none";
+  } else if (scene.status == "neutral") {
+    endingScene.style.display = "flex";
+    endingCard.textContent = "Neutral ending";
+    locationCard.style.display = "none";
+  } else {
+    endingScene.style.display = "none";
+    locationCard.style.display = "block";
+  }
 }
 
 function startGame() {
@@ -398,11 +422,45 @@ function loadBackground(location) {
   }
 }
 
+function getLocationDisplayName(location) {
+  const textLocation = {
+    "Hallucinations": "Bedroom",
+    "Pills": "Bedroom",
+    "Water": "Creek",
+    "Outside": "Outside",
+    "Inside": "Kitchen",
+    "Kitchen": "Kitchen",
+    "Bedroom": "Bedroom",
+    "Park": "Park",
+    "Garden": "Garden",
+    "Garage": "Garage",
+    "Bathroom": "Bathroom",
+    "Creek": "Creek",
+  };
+  return textLocation[location] || location;
+}
+
+function currentLocation() {
+  const scene = story.find((s) => s.id === currentSceneId);
+  if (scene) {
+    locationCard.textContent = getLocationDisplayName(scene.location);
+  }
+}
+
+
+// if status == "good","bad","neutral" {
+//   document.body.style.backgroundImage = "url('img/forest.png')";
+// }
+
 function preloadImages(imageArray) {
   imageArray.forEach(function (url) {
     new Image().src = url;
-  });
-}
+  });  
+}  
+
+
+
+
 preloadImages([
   "url('img/forest.png')",
   "url('img/Bathroom.jpg')",
