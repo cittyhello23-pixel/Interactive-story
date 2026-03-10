@@ -15,8 +15,8 @@ const story = [
     button1: {
       text: "NEXT",
       next: "The grass",
-      location: "Outside",
     },
+    location: "Outside",
   },
   {
     id: "The grass",
@@ -24,8 +24,8 @@ const story = [
     button1: {
       text: "NEXT",
       next: "Remember",
-      location: "Outside",
     },
+    location: "Outside",
   },
   {
     id: "Remember",
@@ -54,8 +54,8 @@ const story = [
     button2: {
       text: "THROW THEM AWAY",
       next: "Throw them away",
-      location: "Bedroom",
     },
+    location: "Bedroom",
   },
   {
     id: "Neutral ending",
@@ -64,7 +64,7 @@ const story = [
       text: "RESTART",
       next: "Start",
     },
-    location: "Bedroom",
+    location: "Pills",
   },
   {
     id: "Throw them away",
@@ -262,7 +262,7 @@ const story = [
       text: "RESTART",
       next: "Start",
     },
-    location: "Bedroom",
+    location: "Hallucinations",
   },
   {
     id: "The park",
@@ -284,4 +284,123 @@ const story = [
   },
 ];
 
+let textCard = document.getElementById("textCardContent");
+let textCardOptions1 = document.getElementById("textCardOptions1");
+let textCardOptions2 = document.getElementById("textCardOptions2");
+let textCardOptions3 = document.getElementById("textCardOptions3");
+let locationCard = document.getElementById("locationCard");
+let currentSceneId = "Start";
 
+function loadScene(sceneId) {
+  console.log("sceneId", sceneId);
+  const scene = story.find((s) => s.id === sceneId);
+  if (!scene) return;
+
+  console.log(scene);
+  loadBackground(scene.location);
+
+  currentSceneId = scene.id;
+
+  console.log(scene.button2);
+  if (scene.button2) {
+    textCardOptions2.textContent = scene.button2.text;
+    textCardOptions2.onclick = () => loadScene(scene.button2.next);
+  }
+
+  if (scene.button3) {
+    textCardOptions3.textContent = scene.button3.text;
+    textCardOptions3.onclick = () => loadScene(scene.button3.next);
+  }
+  textCard.textContent = scene.text;
+  textCardOptions1.textContent = scene.button1.text;
+
+  console.log(scene.button2);
+  console.log(!scene.button2);
+  if (!scene.button2) {
+    textCardOptions2.style.display = "none";
+  } else {
+    textCardOptions2.style.display = "block";
+  }
+  if (!scene.button3) {
+    textCardOptions3.style.display = "none";
+  } else {
+    textCardOptions3.style.display = "block";
+  }
+
+  textCardOptions1.onclick = () => loadScene(scene.button1.next);
+}
+loadScene("Start");
+
+function loadBackground(location) {
+  switch (location) {
+    case "Creek":
+      document.body.style.backgroundImage = "url('img/Creek.jpg')";
+
+      break;
+    case "Pills":
+      document.body.style.backgroundImage = "url('img/Pills.jpg')";
+
+      break;
+    case "Hallucinations":
+      document.body.style.backgroundImage = "url('img/Hallucinations.jpg')";
+
+      break;
+    case "Outside":
+      document.body.style.backgroundImage = "url('img/Outside.jpg')";
+
+      break;
+    case "Water":
+      document.body.style.backgroundImage = "url('img/Water.jpg')";
+
+      break;
+    case "Inside":
+      document.body.style.backgroundImage = "url('img/Kitchen.jpg')";
+
+      break;
+    case "Kitchen":
+      document.body.style.backgroundImage = "url('img/Kitchen.jpg')";
+
+      break;
+    case "Bedroom":
+      document.body.style.backgroundImage = "url('img/Bedroom.jpg')";
+
+      break;
+    case "Park":
+      document.body.style.backgroundImage = "url('img/Park.jpg')";
+
+      break;
+    case "Garden":
+      document.body.style.backgroundImage = "url('img/Garden.jpg')";
+
+      break;
+
+    case "Garage":
+      document.body.style.backgroundImage = "url('img/Garage.jpg')";
+      break;
+    case "Bathroom":
+      document.body.style.backgroundImage = "url('img/Bathroom.jpg')";
+      break;
+    default:
+      document.body.style.backgroundImage = "url('img/forest.png')";
+  }
+}
+
+function preloadImages(imageArray) {
+  imageArray.forEach(function (url) {
+    new Image().src = url;
+  });
+}
+preloadImages([
+  "url('img/forest.png')",
+  "url('img/Bathroom.jpg')",
+  "url('img/Garage.jpg')",
+  "url('img/Garden.jpg')",
+  "url('img/Park.jpg')",
+  "url('img/Bedroom.jpg')",
+  "url('img/Kitchen.jpg')",
+  "url('img/Water.jpg')",
+  "url('img/Outside.jpg')",
+  "url('img/Hallucinations.jpg')",
+  "url('img/Pills.jpg')",
+  "url('img/Creek.jpg')",
+]);
