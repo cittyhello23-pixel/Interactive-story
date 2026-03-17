@@ -303,6 +303,7 @@ let currentSceneId = "Start";
 let sceneHistory = [];
 let endingScene = document.getElementById("endingScene");
 let endingCard = document.getElementById("endingCard");
+let gameStarted = false;
 
 // Function to load a scene based on its ID
 function loadScene(sceneId, skipHistory) {
@@ -350,6 +351,7 @@ function loadScene(sceneId, skipHistory) {
 
 // Function to start the game
 function startGame() {
+  gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
@@ -358,6 +360,7 @@ function startGame() {
 }
 
 function showStartScreen() {
+  gameStarted = false;
   startPage.style.display = "block";
   mainCard.style.display = "none";
   locationCard.style.display = "none";
@@ -429,7 +432,7 @@ document.addEventListener('keydown', function(event) {
     localStorage.removeItem("currentSceneId");
     showStartScreen();
   } else if (event.key === 'Enter') {
-    if (sceneHistory.length > 0) {
+    if (gameStarted && sceneHistory.length > 0) {
       const previousScene = sceneHistory.pop();
       loadScene(previousScene, true);
     }
@@ -445,6 +448,7 @@ document.addEventListener('keydown', function(event) {
 // Saves the game using local storage 
 const savedScene = localStorage.getItem("currentSceneId");
 if (savedScene) {
+  gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
