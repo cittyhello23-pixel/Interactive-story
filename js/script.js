@@ -1,4 +1,3 @@
-
 // Define the story as an array of scenes
 const story = [
   {
@@ -67,8 +66,7 @@ const story = [
       next: "Start",
     },
     location: "Pills",
-        status: "neutral",
-
+    status: "neutral",
   },
   {
     id: "Throw them away",
@@ -223,7 +221,6 @@ const story = [
       next: "Search garage",
     },
     location: "Inside",
-  
   },
   {
     id: "Search garage",
@@ -305,6 +302,23 @@ let endingScene = document.getElementById("endingScene");
 let endingCard = document.getElementById("endingCard");
 let gameStarted = false;
 
+// Audio setup
+let startSound = new Audio("audio/start.mp3");
+startSound.loop = true;
+let gameBgrSound = new Audio("audio/bgr.mp3");
+gameBgrSound.loop = true;
+
+function stopLoopingSounds() {
+  startSound.pause();
+  gameBgrSound.pause();
+}
+
+function playLoopSound(audio) {
+  stopLoopingSounds();
+  audio.currentTime = 0;
+  audio.play();
+}
+
 // Function to load a scene based on its ID
 function loadScene(sceneId, skipHistory) {
   const scene = story.find((s) => s.id === sceneId);
@@ -343,9 +357,12 @@ function loadScene(sceneId, skipHistory) {
 
   if (scene.status) {
     endingScene.style.display = "flex";
-    endingCard.textContent = scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
+    endingCard.textContent =
+      scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
+    stopLoopingSounds();
   } else {
     endingScene.style.display = "none";
+    if (gameStarted && gameBgrSound.paused) playLoopSound(gameBgrSound);
   }
 }
 
@@ -356,6 +373,7 @@ function startGame() {
   mainCard.style.display = "block";
   locationCard.style.display = "block";
   sceneHistory = [];
+  playLoopSound(gameBgrSound);
   loadScene("Start");
 }
 
@@ -365,6 +383,7 @@ function showStartScreen() {
   mainCard.style.display = "none";
   locationCard.style.display = "none";
   document.body.style.backgroundImage = "url('./img/Start.jpg')";
+  playLoopSound(startSound);
 }
 
 showStartScreen();
@@ -373,19 +392,44 @@ showStartScreen();
 function loadBackground(location) {
   let bg;
   switch (location) {
-    case "Creek": bg = "img/Creek.jpg"; break;
-    case "Pills": bg = "img/Pills.jpg"; break;
-    case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
-    case "Outside": bg = "img/Outside.jpg"; break;
-    case "Water": bg = "img/Water.jpg"; break;
-    case "Inside": bg = "img/Kitchen.jpg"; break;
-    case "Kitchen": bg = "img/Kitchen.jpg"; break;
-    case "Bedroom": bg = "img/Bedroom.jpg"; break;
-    case "Park": bg = "img/Park.jpg"; break;
-    case "Garden": bg = "img/Garden.jpg"; break;
-    case "Garage": bg = "img/Garage.jpg"; break;
-    case "Bathroom": bg = "img/Bathroom.jpg"; break;
-    default: bg = "img/Start.jpg";
+    case "Creek":
+      bg = "img/Creek.jpg";
+      break;
+    case "Pills":
+      bg = "img/Pills.jpg";
+      break;
+    case "Hallucinations":
+      bg = "img/Hallucinations.jpg";
+      break;
+    case "Outside":
+      bg = "img/Outside.jpg";
+      break;
+    case "Water":
+      bg = "img/Water.jpg";
+      break;
+    case "Inside":
+      bg = "img/Kitchen.jpg";
+      break;
+    case "Kitchen":
+      bg = "img/Kitchen.jpg";
+      break;
+    case "Bedroom":
+      bg = "img/Bedroom.jpg";
+      break;
+    case "Park":
+      bg = "img/Park.jpg";
+      break;
+    case "Garden":
+      bg = "img/Garden.jpg";
+      break;
+    case "Garage":
+      bg = "img/Garage.jpg";
+      break;
+    case "Bathroom":
+      bg = "img/Bathroom.jpg";
+      break;
+    default:
+      bg = "img/Start.jpg";
   }
   document.body.style.backgroundImage = `url('${bg}')`;
 }
@@ -393,18 +437,18 @@ function loadBackground(location) {
 // Function to get the display name for a location
 function getLocationDisplayName(location) {
   const textLocation = {
-    "Hallucinations": "Bedroom",
-    "Pills": "Bedroom",
-    "Water": "Creek",
-    "Outside": "Outside",
-    "Inside": "Kitchen",
-    "Kitchen": "Kitchen",
-    "Bedroom": "Bedroom",
-    "Park": "Park",
-    "Garden": "Garden",
-    "Garage": "Garage",
-    "Bathroom": "Bathroom",
-    "Creek": "Creek",
+    Hallucinations: "Bedroom",
+    Pills: "Bedroom",
+    Water: "Creek",
+    Outside: "Outside",
+    Inside: "Kitchen",
+    Kitchen: "Kitchen",
+    Bedroom: "Bedroom",
+    Park: "Park",
+    Garden: "Garden",
+    Garage: "Garage",
+    Bathroom: "Bathroom",
+    Creek: "Creek",
   };
   return textLocation[location] || location;
 }
@@ -417,41 +461,51 @@ function currentLocation() {
 
 // Function to preload images
 function preloadImages(imageArray) {
-  imageArray.forEach(url => new Image().src = url);
+  imageArray.forEach((url) => (new Image().src = url));
 }
 
 preloadImages([
-  "img/forest.png","img/Bathroom.jpg","img/Garage.jpg","img/Garden.jpg",
-  "img/Park.jpg","img/Bedroom.jpg","img/Kitchen.jpg","img/Water.jpg",
-  "img/Outside.jpg","img/Hallucinations.jpg","img/Pills.jpg","img/Creek.jpg"
+  "img/forest.png",
+  "img/Bathroom.jpg",
+  "img/Garage.jpg",
+  "img/Garden.jpg",
+  "img/Park.jpg",
+  "img/Bedroom.jpg",
+  "img/Kitchen.jpg",
+  "img/Water.jpg",
+  "img/Outside.jpg",
+  "img/Hallucinations.jpg",
+  "img/Pills.jpg",
+  "img/Creek.jpg",
 ]);
 
 // Keyboard controls
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'r') {
+document.addEventListener("keydown", function (event) {
+  if (event.key === "r") {
     localStorage.removeItem("currentSceneId");
     showStartScreen();
-  } else if (event.key === 'Enter') {
+  } else if (event.key === "Enter") {
     if (gameStarted && sceneHistory.length > 0) {
       const previousScene = sceneHistory.pop();
       loadScene(previousScene, true);
     }
-  } else if (event.key === '1') {
+  } else if (event.key === "1") {
     if (textCardOptions1.onclick) textCardOptions1.click();
-  } else if (event.key === '2') {
-    if (textCardOptions2.style.display !== 'none') textCardOptions2.click();
-  } else if (event.key === '3') {
-    if (textCardOptions3.style.display !== 'none') textCardOptions3.click();
+  } else if (event.key === "2") {
+    if (textCardOptions2.style.display !== "none") textCardOptions2.click();
+  } else if (event.key === "3") {
+    if (textCardOptions3.style.display !== "none") textCardOptions3.click();
   }
 });
 
-// Saves the game using local storage 
+// Saves the game using local storage
 const savedScene = localStorage.getItem("currentSceneId");
 if (savedScene) {
   gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
+  playLoopSound(gameBgrSound);
   loadScene(savedScene);
 } else {
   showStartScreen();
