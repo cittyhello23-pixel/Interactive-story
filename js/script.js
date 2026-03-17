@@ -447,11 +447,6 @@ function currentLocation() {
   }
 }
 
-
-// if status == "good","bad","neutral" {
-//   document.body.style.backgroundImage = "url('img/forest.png')";
-// }
-
 function preloadImages(imageArray) {
   imageArray.forEach(function (url) {
     new Image().src = url;
