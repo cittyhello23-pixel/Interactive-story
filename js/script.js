@@ -302,6 +302,7 @@ function loadScene(sceneId) {
   loadBackground(scene.location);
 
   currentSceneId = scene.id;
+  
 
   console.log(scene.button2);
   if (scene.button2) {
