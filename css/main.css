@@ -83,15 +83,15 @@ body {
 }
 #textCardOptions1:hover {
   opacity: 75%;
-   cursor: pointer;
+  cursor: pointer;
 }
 #textCardOptions2:hover {
   opacity: 75%;
-   cursor: pointer;
-} 
+  cursor: pointer;
+}
 #textCardOptions3:hover {
   opacity: 75%;
-   cursor: pointer;
+  cursor: pointer;
 }
 
 #textCardOptions1 {
@@ -113,6 +113,28 @@ body {
   border-image-source: url(../img/Style=Heavyeeee.svg);
   border-image-slice: 16 fill;
   width: 100%;
+}
+
+#endingScene {
+  display: none;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#endingCard {
+  border: 16px solid transparent;
+  border-image-source: url(../img/Style=Heavyeeee.svg);
+  border-image-slice: 16 fill;
+  width: 700px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 35px;
+  margin-bottom: 300;
 }
 
 @font-face {
