@@ -291,8 +291,6 @@ const story = [
     status: "bad",
   },
 ];
-
-
 // Get references to DOM elements
 let textCard = document.getElementById("textCardContent");
 let textCardOptions1 = document.getElementById("textCardOptions1");
@@ -302,137 +300,92 @@ let locationCard = document.getElementById("locationCard");
 let startPage = document.querySelector(".startPage");
 let mainCard = document.querySelector(".mainCard");
 let currentSceneId = "Start";
-
+let sceneHistory = [];
+let endingScene = document.getElementById("endingScene");
+let endingCard = document.getElementById("endingCard");
 
 // Function to load a scene based on its ID
-function loadScene(sceneId) {
-  console.log("sceneId", sceneId);
+function loadScene(sceneId, skipHistory) {
   const scene = story.find((s) => s.id === sceneId);
   if (!scene) return;
 
-  console.log(scene);
-  loadBackground(scene.location);
+  if (!skipHistory && currentSceneId !== sceneId) {
+    sceneHistory.push(currentSceneId);
+  }
 
   currentSceneId = scene.id;
   localStorage.setItem("currentSceneId", scene.id);
 
-  console.log(scene.button2);
+  loadBackground(scene.location);
+
+  textCard.textContent = scene.text;
+  textCardOptions1.textContent = scene.button1.text;
+  textCardOptions1.onclick = () => loadScene(scene.button1.next);
+
   if (scene.button2) {
     textCardOptions2.textContent = scene.button2.text;
+    textCardOptions2.style.display = "block";
     textCardOptions2.onclick = () => loadScene(scene.button2.next);
+  } else {
+    textCardOptions2.style.display = "none";
   }
 
   if (scene.button3) {
     textCardOptions3.textContent = scene.button3.text;
-    textCardOptions3.onclick = () => loadScene(scene.button3.next);
-  }
-  textCard.textContent = scene.text;
-  textCardOptions1.textContent = scene.button1.text;
-
-  console.log(scene.button2);
-  console.log(!scene.button2);
-  if (!scene.button2) {
-    textCardOptions2.style.display = "none";
-  } else {
-    textCardOptions2.style.display = "block";
-  }
-  if (!scene.button3) {
-    textCardOptions3.style.display = "none";
-  } else {
     textCardOptions3.style.display = "block";
+    textCardOptions3.onclick = () => loadScene(scene.button3.next);
+  } else {
+    textCardOptions3.style.display = "none";
   }
-  textCardOptions1.onclick = () => loadScene(scene.button1.next);
-  currentLocation();
-  
 
-  // Check for ending conditions
-  if (scene.status == "good") {
+  currentLocation();
+
+  if (scene.status) {
     endingScene.style.display = "flex";
-    endingCard.textContent = "Good ending";
-    locationCard.style.display = "none";
-  } else if (scene.status == "bad") {
-    endingScene.style.display = "flex";
-    endingCard.textContent = "Bad ending";
-    locationCard.style.display = "none";
-  } else if (scene.status == "neutral") {
-    endingScene.style.display = "flex";
-    endingCard.textContent = "Neutral ending";
-    locationCard.style.display = "none";
+    endingCard.textContent = scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
   } else {
     endingScene.style.display = "none";
-    locationCard.style.display = "block";
   }
 }
-
 
 // Function to start the game
 function startGame() {
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
+  sceneHistory = [];
   loadScene("Start");
 }
-startPage.style.display = "block";
-mainCard.style.display = "none";
-locationCard.style.display = "none";
-document.body.style.backgroundImage = "url('./img/Start.jpg')";
 
+function showStartScreen() {
+  startPage.style.display = "block";
+  mainCard.style.display = "none";
+  locationCard.style.display = "none";
+  document.body.style.backgroundImage = "url('./img/Start.jpg')";
+}
+
+showStartScreen();
 
 // Function to load the background image based on the location
 function loadBackground(location) {
+  let bg;
   switch (location) {
-    case "Creek":
-      document.body.style.backgroundImage = "url('img/Creek.jpg')";
-
-      break;
-    case "Pills":
-      document.body.style.backgroundImage = "url('img/  Pills.jpg')";
-
-      break;
-    case "Hallucinations":
-      document.body.style.backgroundImage = "url('img/Hallucinations.jpg')";
-
-      break;
-    case "Outside":
-      document.body.style.backgroundImage = "url('img/Outside.jpg')";
-
-      break;
-    case "Water":
-      document.body.style.backgroundImage = "url('img/Water.jpg')";
-
-      break;
-    case "Inside":
-      document.body.style.backgroundImage = "url('img/Kitchen.jpg')";
-
-      break;
-    case "Kitchen":
-      document.body.style.backgroundImage = "url('img/Kitchen.jpg')";
-
-      break;
-    case "Bedroom":
-      document.body.style.backgroundImage = "url('img/Bedroom.jpg')";
-
-      break;
-    case "Park":
-      document.body.style.backgroundImage = "url('img/Park.jpg')";
-
-      break;
-    case "Garden":
-      document.body.style.backgroundImage = "url('img/Garden.jpg')";
-
-      break;
-
-    case "Garage":
-      document.body.style.backgroundImage = "url('img/Garage.jpg')";
-      break;
-    case "Bathroom":
-      document.body.style.backgroundImage = "url('img/Bathroom.jpg')";
-      break;
-    default:
-      document.body.style.backgroundImage = "url('img/Start.jpg')";
+    case "Creek": bg = "img/Creek.jpg"; break;
+    case "Pills": bg = "img/Pills.jpg"; break;
+    case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
+    case "Outside": bg = "img/Outside.jpg"; break;
+    case "Water": bg = "img/Water.jpg"; break;
+    case "Inside": bg = "img/Kitchen.jpg"; break;
+    case "Kitchen": bg = "img/Kitchen.jpg"; break;
+    case "Bedroom": bg = "img/Bedroom.jpg"; break;
+    case "Park": bg = "img/Park.jpg"; break;
+    case "Garden": bg = "img/Garden.jpg"; break;
+    case "Garage": bg = "img/Garage.jpg"; break;
+    case "Bathroom": bg = "img/Bathroom.jpg"; break;
+    default: bg = "img/Start.jpg";
   }
+  document.body.style.backgroundImage = `url('${bg}')`;
 }
-
 
 // Function to get the display name for a location
 function getLocationDisplayName(location) {
@@ -453,53 +406,41 @@ function getLocationDisplayName(location) {
   return textLocation[location] || location;
 }
 
-
 // Function to update the current location display
 function currentLocation() {
   const scene = story.find((s) => s.id === currentSceneId);
-  if (scene) {
-    locationCard.textContent = getLocationDisplayName(scene.location);
-  }
+  if (scene) locationCard.textContent = getLocationDisplayName(scene.location);
 }
-
 
 // Function to preload images
 function preloadImages(imageArray) {
-  imageArray.forEach(function (url) {
-    new Image().src = url;
-  });  
-}  
+  imageArray.forEach(url => new Image().src = url);
+}
 
-
-
-// Preload all background images to ensure smooth transitions
 preloadImages([
-  "url('img/forest.png')",
-  "url('img/Bathroom.jpg')",
-  "url('img/Garage.jpg')",
-  "url('img/Garden.jpg')",
-  "url('img/Park.jpg')",
-  "url('img/Bedroom.jpg')",
-  "url('img/Kitchen.jpg')",
-  "url('img/Water.jpg')",
-  "url('img/Outside.jpg')",
-  "url('img/Hallucinations.jpg')",
-  "url('img/Pills.jpg')",
-  "url('img/Creek.jpg')",
+  "img/forest.png","img/Bathroom.jpg","img/Garage.jpg","img/Garden.jpg",
+  "img/Park.jpg","img/Bedroom.jpg","img/Kitchen.jpg","img/Water.jpg",
+  "img/Outside.jpg","img/Hallucinations.jpg","img/Pills.jpg","img/Creek.jpg"
 ]);
 
-
-
-// Add event listener for keydown to reload the page when 'r' is pressed
+// Keyboard controls
 document.addEventListener('keydown', function(event) {
   if (event.key === 'r') {
-    localStorage.removeItem("currentSceneId"); // reset progress
-    location.reload();
-    
+    localStorage.removeItem("currentSceneId");
+    showStartScreen();
+  } else if (event.key === 'Enter') {
+    if (sceneHistory.length > 0) {
+      const previousScene = sceneHistory.pop();
+      loadScene(previousScene, true);
+    }
+  } else if (event.key === '1') {
+    if (textCardOptions1.onclick) textCardOptions1.click();
+  } else if (event.key === '2') {
+    if (textCardOptions2.style.display !== 'none') textCardOptions2.click();
+  } else if (event.key === '3') {
+    if (textCardOptions3.style.display !== 'none') textCardOptions3.click();
   }
 });
-
-
 
 // Saves the game using local storage 
 const savedScene = localStorage.getItem("currentSceneId");
@@ -509,7 +450,5 @@ if (savedScene) {
   locationCard.style.display = "block";
   loadScene(savedScene);
 } else {
-  startPage.style.display = "block";
-  mainCard.style.display = "none";
-  locationCard.style.display = "none";
+  showStartScreen();
 }
