@@ -1,3 +1,5 @@
+
+// Define the story as an array of scenes
 const story = [
   {
     id: "Start",
@@ -290,6 +292,8 @@ const story = [
   },
 ];
 
+
+// Get references to DOM elements
 let textCard = document.getElementById("textCardContent");
 let textCardOptions1 = document.getElementById("textCardOptions1");
 let textCardOptions2 = document.getElementById("textCardOptions2");
@@ -299,6 +303,8 @@ let startPage = document.querySelector(".startPage");
 let mainCard = document.querySelector(".mainCard");
 let currentSceneId = "Start";
 
+
+// Function to load a scene based on its ID
 function loadScene(sceneId) {
   console.log("sceneId", sceneId);
   const scene = story.find((s) => s.id === sceneId);
@@ -308,7 +314,7 @@ function loadScene(sceneId) {
   loadBackground(scene.location);
 
   currentSceneId = scene.id;
-  
+  localStorage.setItem("currentSceneId", scene.id);
 
   console.log(scene.button2);
   if (scene.button2) {
@@ -335,10 +341,11 @@ function loadScene(sceneId) {
   } else {
     textCardOptions3.style.display = "block";
   }
-
   textCardOptions1.onclick = () => loadScene(scene.button1.next);
   currentLocation();
   
+
+  // Check for ending conditions
   if (scene.status == "good") {
     endingScene.style.display = "flex";
     endingCard.textContent = "Good ending";
@@ -357,18 +364,21 @@ function loadScene(sceneId) {
   }
 }
 
+
+// Function to start the game
 function startGame() {
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
   loadScene("Start");
 }
-
 startPage.style.display = "block";
 mainCard.style.display = "none";
 locationCard.style.display = "none";
 document.body.style.backgroundImage = "url('./img/Start.jpg')";
 
+
+// Function to load the background image based on the location
 function loadBackground(location) {
   switch (location) {
     case "Creek":
@@ -423,6 +433,8 @@ function loadBackground(location) {
   }
 }
 
+
+// Function to get the display name for a location
 function getLocationDisplayName(location) {
   const textLocation = {
     "Hallucinations": "Bedroom",
@@ -441,6 +453,8 @@ function getLocationDisplayName(location) {
   return textLocation[location] || location;
 }
 
+
+// Function to update the current location display
 function currentLocation() {
   const scene = story.find((s) => s.id === currentSceneId);
   if (scene) {
@@ -449,10 +463,7 @@ function currentLocation() {
 }
 
 
-// if status == "good","bad","neutral" {
-//   document.body.style.backgroundImage = "url('img/forest.png')";
-// }
-
+// Function to preload images
 function preloadImages(imageArray) {
   imageArray.forEach(function (url) {
     new Image().src = url;
@@ -461,7 +472,7 @@ function preloadImages(imageArray) {
 
 
 
-
+// Preload all background images to ensure smooth transitions
 preloadImages([
   "url('img/forest.png')",
   "url('img/Bathroom.jpg')",
@@ -477,8 +488,28 @@ preloadImages([
   "url('img/Creek.jpg')",
 ]);
 
+
+
+// Add event listener for keydown to reload the page when 'r' is pressed
 document.addEventListener('keydown', function(event) {
   if (event.key === 'r') {
+    localStorage.removeItem("currentSceneId"); // reset progress
     location.reload();
+    
   }
 });
+
+
+
+// Saves the game using local storage 
+const savedScene = localStorage.getItem("currentSceneId");
+if (savedScene) {
+  startPage.style.display = "none";
+  mainCard.style.display = "block";
+  locationCard.style.display = "block";
+  loadScene(savedScene);
+} else {
+  startPage.style.display = "block";
+  mainCard.style.display = "none";
+  locationCard.style.display = "none";
+}
