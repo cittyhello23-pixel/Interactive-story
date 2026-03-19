@@ -297,10 +297,11 @@ let textCardOptions3 = document.getElementById("textCardOptions3");
 let locationCard = document.getElementById("locationCard");
 let startPage = document.querySelector(".startPage");
 let mainCard = document.querySelector(".mainCard");
-let currentSceneId = "Start";
-let sceneHistory = [];
 let endingScene = document.getElementById("endingScene");
 let endingCard = document.getElementById("endingCard");
+
+let currentSceneId = "Start";
+let sceneHistory = [];
 let gameStarted = false;
 
 // Audio setup
@@ -354,31 +355,26 @@ function loadScene(sceneId, skipHistory) {
     textCardOptions3.style.display = "none";
   }
 
-  currentLocation();
-
-  // Ending scene handling
   if (scene.status) {
     endingScene.style.display = "flex";
     endingCard.textContent =
       scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
-
     locationCard.style.display = "none";
     stopLoopingSounds();
   } else {
     endingScene.style.display = "none";
     locationCard.style.display = "block";
-
     if (gameStarted && gameBgrSound.paused) playLoopSound(gameBgrSound);
   }
+
+  updateLocation(scene.location);
 }
 
-// Function to start the game
 function startGame() {
   gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
-  endingScene.style.display = "none"; // ensure hidden
   sceneHistory = [];
   playLoopSound(gameBgrSound);
   loadScene("Start");
@@ -389,12 +385,9 @@ function showStartScreen() {
   startPage.style.display = "block";
   mainCard.style.display = "none";
   locationCard.style.display = "none";
-  endingScene.style.display = "none"; // ensure hidden
   document.body.style.backgroundImage = "url('./img/Start.jpg')";
   playLoopSound(startSound);
 }
-
-showStartScreen();
 
 // Function to load the background image based on the location
 function loadBackground(location) {
@@ -405,7 +398,7 @@ function loadBackground(location) {
     case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
     case "Outside": bg = "img/Outside.jpg"; break;
     case "Water": bg = "img/Water.jpg"; break;
-    case "Inside": bg = "img/Kitchen.jpg"; break;
+    case "Inside":
     case "Kitchen": bg = "img/Kitchen.jpg"; break;
     case "Bedroom": bg = "img/Bedroom.jpg"; break;
     case "Park": bg = "img/Park.jpg"; break;
@@ -417,9 +410,9 @@ function loadBackground(location) {
   document.body.style.backgroundImage = `url('${bg}')`;
 }
 
-// Function to get the display name for a location
-function getLocationDisplayName(location) {
-  const textLocation = {
+// Function to update the current location display
+function updateLocation(location) {
+  const locationNames = {
     Hallucinations: "Bedroom",
     Pills: "Bedroom",
     Water: "Creek",
@@ -433,13 +426,7 @@ function getLocationDisplayName(location) {
     Bathroom: "Bathroom",
     Creek: "Creek",
   };
-  return textLocation[location] || location;
-}
-
-// Function to update the current location display
-function currentLocation() {
-  const scene = story.find((s) => s.id === currentSceneId);
-  if (scene) locationCard.textContent = getLocationDisplayName(scene.location);
+  locationCard.textContent = locationNames[location] || location;
 }
 
 // Keyboard controls
@@ -452,7 +439,10 @@ document.addEventListener("keydown", function (event) {
       const previousScene = sceneHistory.pop();
       loadScene(previousScene, true);
     }
-  } else if (event.key === "1" || event.key === " ") {
+  } else if (event.key === "1") {
+    if (textCardOptions1.onclick) textCardOptions1.click();
+  } else if (event.key === " ") {
+    event.preventDefault(); // Prevent space from scrolling page
     if (textCardOptions1.onclick) textCardOptions1.click();
   } else if (event.key === "2") {
     if (textCardOptions2.style.display !== "none") textCardOptions2.click();
@@ -461,7 +451,7 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-// Saves the game using local storage
+// Load saved game if any
 const savedScene = localStorage.getItem("currentSceneId");
 if (savedScene) {
   gameStarted = true;
