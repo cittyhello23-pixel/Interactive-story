@@ -288,8 +288,7 @@ const story = [
     status: "bad",
   },
 ];
-
-// Get references to DOM elements
+// DOM references
 let textCard = document.getElementById("textCardContent");
 let textCardOptions1 = document.getElementById("textCardOptions1");
 let textCardOptions2 = document.getElementById("textCardOptions2");
@@ -321,7 +320,7 @@ function playLoopSound(audio) {
   audio.play();
 }
 
-// Function to load a scene based on its ID
+// Load scene
 function loadScene(sceneId, skipHistory) {
   const scene = story.find((s) => s.id === sceneId);
   if (!scene) return;
@@ -355,10 +354,10 @@ function loadScene(sceneId, skipHistory) {
     textCardOptions3.style.display = "none";
   }
 
+  // Show location or ending
   if (scene.status) {
     endingScene.style.display = "flex";
-    endingCard.textContent =
-      scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
+    endingCard.textContent = scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
     locationCard.style.display = "none";
     stopLoopingSounds();
   } else {
@@ -367,29 +366,33 @@ function loadScene(sceneId, skipHistory) {
     if (gameStarted && gameBgrSound.paused) playLoopSound(gameBgrSound);
   }
 
-  updateLocation(scene.location);
+  currentLocation();
 }
 
+// Start game
 function startGame() {
   gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
+  endingScene.style.display = "none";
   sceneHistory = [];
   playLoopSound(gameBgrSound);
   loadScene("Start");
 }
 
+// Show start screen
 function showStartScreen() {
   gameStarted = false;
   startPage.style.display = "block";
   mainCard.style.display = "none";
   locationCard.style.display = "none";
+  endingScene.style.display = "none";
   document.body.style.backgroundImage = "url('./img/Start.jpg')";
   playLoopSound(startSound);
 }
 
-// Function to load the background image based on the location
+// Background
 function loadBackground(location) {
   let bg;
   switch (location) {
@@ -398,7 +401,7 @@ function loadBackground(location) {
     case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
     case "Outside": bg = "img/Outside.jpg"; break;
     case "Water": bg = "img/Water.jpg"; break;
-    case "Inside":
+    case "Inside": bg = "img/Kitchen.jpg"; break;
     case "Kitchen": bg = "img/Kitchen.jpg"; break;
     case "Bedroom": bg = "img/Bedroom.jpg"; break;
     case "Park": bg = "img/Park.jpg"; break;
@@ -410,9 +413,9 @@ function loadBackground(location) {
   document.body.style.backgroundImage = `url('${bg}')`;
 }
 
-// Function to update the current location display
-function updateLocation(location) {
-  const locationNames = {
+// Current location display
+function getLocationDisplayName(location) {
+  const textLocation = {
     Hallucinations: "Bedroom",
     Pills: "Bedroom",
     Water: "Creek",
@@ -426,23 +429,27 @@ function updateLocation(location) {
     Bathroom: "Bathroom",
     Creek: "Creek",
   };
-  locationCard.textContent = locationNames[location] || location;
+  return textLocation[location] || location;
+}
+
+function currentLocation() {
+  const scene = story.find((s) => s.id === currentSceneId);
+  if (scene && !scene.status) locationCard.textContent = getLocationDisplayName(scene.location);
 }
 
 // Keyboard controls
 document.addEventListener("keydown", function (event) {
+  if (!gameStarted) return; // ignore keypresses on start screen
+
   if (event.key === "r") {
     localStorage.removeItem("currentSceneId");
     showStartScreen();
   } else if (event.key === "Backspace") {
-    if (gameStarted && sceneHistory.length > 0) {
+    if (sceneHistory.length > 0) {
       const previousScene = sceneHistory.pop();
       loadScene(previousScene, true);
     }
-  } else if (event.key === "1") {
-    if (textCardOptions1.onclick) textCardOptions1.click();
-  } else if (event.key === " ") {
-    event.preventDefault(); // Prevent space from scrolling page
+  } else if (event.key === "1" || event.key === " ") {
     if (textCardOptions1.onclick) textCardOptions1.click();
   } else if (event.key === "2") {
     if (textCardOptions2.style.display !== "none") textCardOptions2.click();
@@ -451,13 +458,14 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-// Load saved game if any
+// Load saved scene
 const savedScene = localStorage.getItem("currentSceneId");
 if (savedScene) {
   gameStarted = true;
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
+  endingScene.style.display = "none";
   playLoopSound(gameBgrSound);
   loadScene(savedScene);
 } else {
