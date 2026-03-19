@@ -289,46 +289,36 @@ const story = [
   },
 ];
 // DOM references
-let textCard = document.getElementById("textCardContent");
-let textCardOptions1 = document.getElementById("textCardOptions1");
-let textCardOptions2 = document.getElementById("textCardOptions2");
-let textCardOptions3 = document.getElementById("textCardOptions3");
-let locationCard = document.getElementById("locationCard");
-let startPage = document.querySelector(".startPage");
-let mainCard = document.querySelector(".mainCard");
-let endingScene = document.getElementById("endingScene");
-let endingCard = document.getElementById("endingCard");
+const textCard = document.getElementById("textCardContent");
+const textCardOptions1 = document.getElementById("textCardOptions1");
+const textCardOptions2 = document.getElementById("textCardOptions2");
+const textCardOptions3 = document.getElementById("textCardOptions3");
+const locationCard = document.getElementById("locationCard");
+const startPage = document.querySelector(".startPage");
+const mainCard = document.querySelector(".mainCard");
+const endingScene = document.getElementById("endingScene");
+const endingCard = document.getElementById("endingCard");
 
+// Game state
 let currentSceneId = "Start";
 let sceneHistory = [];
 let gameStarted = false;
 
-// Audio setup
-let startSound = new Audio("audio/start.mp3");
+// Audio
+const startSound = new Audio("audio/start.mp3");
 startSound.loop = true;
-let gameBgrSound = new Audio("audio/bgr.mp3");
+const gameBgrSound = new Audio("audio/bgr.mp3");
 gameBgrSound.loop = true;
 
-function stopLoopingSounds() {
-  startSound.pause();
-  gameBgrSound.pause();
-}
+function stopLoopingSounds() { startSound.pause(); gameBgrSound.pause(); }
+function playLoopSound(audio) { stopLoopingSounds(); audio.currentTime = 0; audio.play(); }
 
-function playLoopSound(audio) {
-  stopLoopingSounds();
-  audio.currentTime = 0;
-  audio.play();
-}
-
-// Load scene
+// Load scene and update text/options
 function loadScene(sceneId, skipHistory) {
-  const scene = story.find((s) => s.id === sceneId);
+  const scene = story.find(s => s.id === sceneId);
   if (!scene) return;
 
-  if (!skipHistory && currentSceneId !== sceneId) {
-    sceneHistory.push(currentSceneId);
-  }
-
+  if (!skipHistory && currentSceneId !== sceneId) sceneHistory.push(currentSceneId);
   currentSceneId = scene.id;
   localStorage.setItem("currentSceneId", scene.id);
 
@@ -339,22 +329,18 @@ function loadScene(sceneId, skipHistory) {
   textCardOptions1.onclick = () => loadScene(scene.button1.next);
 
   if (scene.button2) {
-    textCardOptions2.textContent = scene.button2.text;
     textCardOptions2.style.display = "block";
+    textCardOptions2.textContent = scene.button2.text;
     textCardOptions2.onclick = () => loadScene(scene.button2.next);
-  } else {
-    textCardOptions2.style.display = "none";
-  }
+  } else textCardOptions2.style.display = "none";
 
   if (scene.button3) {
-    textCardOptions3.textContent = scene.button3.text;
     textCardOptions3.style.display = "block";
+    textCardOptions3.textContent = scene.button3.text;
     textCardOptions3.onclick = () => loadScene(scene.button3.next);
-  } else {
-    textCardOptions3.style.display = "none";
-  }
+  } else textCardOptions3.style.display = "none";
 
-  // Show location or ending
+  // Show ending scene or location
   if (scene.status) {
     endingScene.style.display = "flex";
     endingCard.textContent = scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
@@ -394,28 +380,26 @@ function showStartScreen() {
 
 // Background
 function loadBackground(location) {
-  let bg;
-  switch (location) {
-    case "Creek": bg = "img/Creek.jpg"; break;
-    case "Pills": bg = "img/Pills.jpg"; break;
-    case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
-    case "Outside": bg = "img/Outside.jpg"; break;
-    case "Water": bg = "img/Water.jpg"; break;
-    case "Inside": bg = "img/Kitchen.jpg"; break;
-    case "Kitchen": bg = "img/Kitchen.jpg"; break;
-    case "Bedroom": bg = "img/Bedroom.jpg"; break;
-    case "Park": bg = "img/Park.jpg"; break;
-    case "Garden": bg = "img/Garden.jpg"; break;
-    case "Garage": bg = "img/Garage.jpg"; break;
-    case "Bathroom": bg = "img/Bathroom.jpg"; break;
-    default: bg = "img/Start.jpg";
-  }
-  document.body.style.backgroundImage = `url('${bg}')`;
+  const backgrounds = {
+    Creek: "img/Creek.jpg",
+    Pills: "img/Pills.jpg",
+    Hallucinations: "img/Hallucinations.jpg",
+    Outside: "img/Outside.jpg",
+    Water: "img/Water.jpg",
+    Inside: "img/Kitchen.jpg",
+    Kitchen: "img/Kitchen.jpg",
+    Bedroom: "img/Bedroom.jpg",
+    Park: "img/Park.jpg",
+    Garden: "img/Garden.jpg",
+    Garage: "img/Garage.jpg",
+    Bathroom: "img/Bathroom.jpg"
+  };
+  document.body.style.backgroundImage = `url('${backgrounds[location] || "img/Start.jpg"}')`;
 }
 
-// Current location display
+// Display current location
 function getLocationDisplayName(location) {
-  const textLocation = {
+  const map = {
     Hallucinations: "Bedroom",
     Pills: "Bedroom",
     Water: "Creek",
@@ -427,34 +411,39 @@ function getLocationDisplayName(location) {
     Garden: "Garden",
     Garage: "Garage",
     Bathroom: "Bathroom",
-    Creek: "Creek",
+    Creek: "Creek"
   };
-  return textLocation[location] || location;
+  return map[location] || location;
 }
 
 function currentLocation() {
-  const scene = story.find((s) => s.id === currentSceneId);
+  const scene = story.find(s => s.id === currentSceneId);
   if (scene && !scene.status) locationCard.textContent = getLocationDisplayName(scene.location);
 }
 
 // Keyboard controls
-document.addEventListener("keydown", function (event) {
-  if (!gameStarted) return; // ignore keypresses on start screen
+document.addEventListener("keydown", event => {
+  if (!gameStarted) return;
 
-  if (event.key === "r" || event.key === "Escape") {
-    localStorage.removeItem("currentSceneId");
-    showStartScreen();
-  } else if (event.key === "Backspace") {
-    if (sceneHistory.length > 0) {
-      const previousScene = sceneHistory.pop();
-      loadScene(previousScene, true);
-    }
-  } else if (event.key === "1" || event.key === " ") {
-    if (textCardOptions1.onclick) textCardOptions1.click();
-  } else if (event.key === "2") {
-    if (textCardOptions2.style.display !== "none") textCardOptions2.click();
-  } else if (event.key === "3") {
-    if (textCardOptions3.style.display !== "none") textCardOptions3.click();
+  switch (event.key) {
+    case "r":
+    case "Escape":
+      localStorage.removeItem("currentSceneId");
+      showStartScreen();
+      break;
+    case "Backspace":
+      if (sceneHistory.length > 0) loadScene(sceneHistory.pop(), true);
+      break;
+    case "1":
+    case " ":
+      if (textCardOptions1.onclick) textCardOptions1.click();
+      break;
+    case "2":
+      if (textCardOptions2.style.display !== "none") textCardOptions2.click();
+      break;
+    case "3":
+      if (textCardOptions3.style.display !== "none") textCardOptions3.click();
+      break;
   }
 });
 

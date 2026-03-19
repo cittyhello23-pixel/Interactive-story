@@ -81,38 +81,22 @@ body {
   display: flex;
   text-align: center;
 }
-#textCardOptions1:hover {
-  opacity: 75%;
-  cursor: pointer;
-}
-#textCardOptions2:hover {
-  opacity: 75%;
-  cursor: pointer;
-}
-#textCardOptions3:hover {
-  opacity: 75%;
-  cursor: pointer;
-}
 
-#textCardOptions1 {
-  border: 16px solid transparent;
-  border-image-source: url(../img/Style=Heavyeeee.svg);
-  border-image-slice: 16 fill;
-  width: 100%;
-}
-
-#textCardOptions2 {
-  border: 16px solid transparent;
-  border-image-source: url(../img/Style=Heavyeeee.svg);
-  border-image-slice: 16 fill;
-  width: 100%;
-}
-
+#textCardOptions1,
+#textCardOptions2,
 #textCardOptions3 {
   border: 16px solid transparent;
   border-image-source: url(../img/Style=Heavyeeee.svg);
   border-image-slice: 16 fill;
   width: 100%;
+  transition: all 0.3s ease; 
+}
+
+#textCardOptions1:hover,
+#textCardOptions2:hover,
+#textCardOptions3:hover {
+  opacity: 75%;
+  cursor: pointer;
 }
 
 #endingScene {
