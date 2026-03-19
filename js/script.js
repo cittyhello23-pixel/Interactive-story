@@ -484,12 +484,12 @@ document.addEventListener("keydown", function (event) {
   if (event.key === "r") {
     localStorage.removeItem("currentSceneId");
     showStartScreen();
-  } else if (event.key === "Enter") {
+  } else if (event.key === "Backspace") {
     if (gameStarted && sceneHistory.length > 0) {
       const previousScene = sceneHistory.pop();
       loadScene(previousScene, true);
     }
-  } else if (event.key === "1") {
+  } else if (event.key === "1" || event.key === " ") {
     if (textCardOptions1.onclick) textCardOptions1.click();
   } else if (event.key === "2") {
     if (textCardOptions2.style.display !== "none") textCardOptions2.click();
