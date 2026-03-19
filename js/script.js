@@ -288,6 +288,7 @@ const story = [
     status: "bad",
   },
 ];
+
 // Get references to DOM elements
 let textCard = document.getElementById("textCardContent");
 let textCardOptions1 = document.getElementById("textCardOptions1");
@@ -355,13 +356,18 @@ function loadScene(sceneId, skipHistory) {
 
   currentLocation();
 
+  // Ending scene handling
   if (scene.status) {
     endingScene.style.display = "flex";
     endingCard.textContent =
       scene.status.charAt(0).toUpperCase() + scene.status.slice(1) + " ending";
+
+    locationCard.style.display = "none";
     stopLoopingSounds();
   } else {
     endingScene.style.display = "none";
+    locationCard.style.display = "block";
+
     if (gameStarted && gameBgrSound.paused) playLoopSound(gameBgrSound);
   }
 }
@@ -372,6 +378,7 @@ function startGame() {
   startPage.style.display = "none";
   mainCard.style.display = "block";
   locationCard.style.display = "block";
+  endingScene.style.display = "none"; // ensure hidden
   sceneHistory = [];
   playLoopSound(gameBgrSound);
   loadScene("Start");
@@ -382,6 +389,7 @@ function showStartScreen() {
   startPage.style.display = "block";
   mainCard.style.display = "none";
   locationCard.style.display = "none";
+  endingScene.style.display = "none"; // ensure hidden
   document.body.style.backgroundImage = "url('./img/Start.jpg')";
   playLoopSound(startSound);
 }
@@ -392,44 +400,19 @@ showStartScreen();
 function loadBackground(location) {
   let bg;
   switch (location) {
-    case "Creek":
-      bg = "img/Creek.jpg";
-      break;
-    case "Pills":
-      bg = "img/Pills.jpg";
-      break;
-    case "Hallucinations":
-      bg = "img/Hallucinations.jpg";
-      break;
-    case "Outside":
-      bg = "img/Outside.jpg";
-      break;
-    case "Water":
-      bg = "img/Water.jpg";
-      break;
-    case "Inside":
-      bg = "img/Kitchen.jpg";
-      break;
-    case "Kitchen":
-      bg = "img/Kitchen.jpg";
-      break;
-    case "Bedroom":
-      bg = "img/Bedroom.jpg";
-      break;
-    case "Park":
-      bg = "img/Park.jpg";
-      break;
-    case "Garden":
-      bg = "img/Garden.jpg";
-      break;
-    case "Garage":
-      bg = "img/Garage.jpg";
-      break;
-    case "Bathroom":
-      bg = "img/Bathroom.jpg";
-      break;
-    default:
-      bg = "img/Start.jpg";
+    case "Creek": bg = "img/Creek.jpg"; break;
+    case "Pills": bg = "img/Pills.jpg"; break;
+    case "Hallucinations": bg = "img/Hallucinations.jpg"; break;
+    case "Outside": bg = "img/Outside.jpg"; break;
+    case "Water": bg = "img/Water.jpg"; break;
+    case "Inside": bg = "img/Kitchen.jpg"; break;
+    case "Kitchen": bg = "img/Kitchen.jpg"; break;
+    case "Bedroom": bg = "img/Bedroom.jpg"; break;
+    case "Park": bg = "img/Park.jpg"; break;
+    case "Garden": bg = "img/Garden.jpg"; break;
+    case "Garage": bg = "img/Garage.jpg"; break;
+    case "Bathroom": bg = "img/Bathroom.jpg"; break;
+    default: bg = "img/Start.jpg";
   }
   document.body.style.backgroundImage = `url('${bg}')`;
 }
@@ -458,26 +441,6 @@ function currentLocation() {
   const scene = story.find((s) => s.id === currentSceneId);
   if (scene) locationCard.textContent = getLocationDisplayName(scene.location);
 }
-
-// Function to preload images
-function preloadImages(imageArray) {
-  imageArray.forEach((url) => (new Image().src = url));
-}
-
-preloadImages([
-  "img/forest.png",
-  "img/Bathroom.jpg",
-  "img/Garage.jpg",
-  "img/Garden.jpg",
-  "img/Park.jpg",
-  "img/Bedroom.jpg",
-  "img/Kitchen.jpg",
-  "img/Water.jpg",
-  "img/Outside.jpg",
-  "img/Hallucinations.jpg",
-  "img/Pills.jpg",
-  "img/Creek.jpg",
-]);
 
 // Keyboard controls
 document.addEventListener("keydown", function (event) {
