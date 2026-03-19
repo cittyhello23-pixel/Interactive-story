@@ -441,7 +441,7 @@ function currentLocation() {
 document.addEventListener("keydown", function (event) {
   if (!gameStarted) return; // ignore keypresses on start screen
 
-  if (event.key === "r") {
+  if (event.key === "r" || event.key === "Escape") {
     localStorage.removeItem("currentSceneId");
     showStartScreen();
   } else if (event.key === "Backspace") {
