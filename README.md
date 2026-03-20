@@ -19,4 +19,6 @@ My github usage was somewhat inconsistent but as this was my first project using
 Below i will link my figma and a word document that has more information you might optionally read through which includes my storyboard, my issues with miro and the flowchart and a more complex description and analysis of my own work if you ever felt confused, curious or annoyed at my writing. 
 
 https://www.figma.com/design/KYu2h36w1WLA8IWrHNNSkx/Interactive-story-prototype?node-id=0-1&t=bmiHvo0BKY3FlC7g-1
+
+
 https://akershusfylke-my.sharepoint.com/:w:/g/personal/hannahmoh_afk_no/IQCNl1CEAnx6QpKhrnH_uGI8AanjzNfBRMYe-97BRkBuUdg?e=dyfh39
